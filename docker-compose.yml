@@ -1,0 +1,30 @@
+services:
+  mysql:
+    image: mysql
+    container_name: mysql-qvema
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: qvema
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "33061:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin-qvema
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
