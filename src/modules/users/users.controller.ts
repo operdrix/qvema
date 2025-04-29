@@ -16,6 +16,11 @@ export class UsersController {
     return await this.usersService.findOne(id);
   }
 
+  @Get('email/:email')
+  async getUserByEmail(@Param('email') email: string): Promise<User | null> {
+    return await this.usersService.findByEmail(email);
+  }
+
   @Post()
   async createUser(@Body() userData: Partial<User>): Promise<User> {
     return await this.usersService.create(userData)

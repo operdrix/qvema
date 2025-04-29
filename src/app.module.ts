@@ -18,8 +18,7 @@ import { UsersModule } from './modules/users/users.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    UsersModule,
-  ],
+    UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })
