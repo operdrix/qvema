@@ -1,23 +1,22 @@
-import { EntityRepository, Repository } from "typeorm";
-import { User } from "./entities/user.entity";
+// src/users/user.repository.ts
+import { AppDataSource } from 'src/config/datasource';
+import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
 
-@EntityRepository(User)
-export class UsersRepository extends Repository<User> {
-  async findByEmail(email: string): Promise<User | null> {
-    return this.findOne({ where: { email } });
-  }
+const UsersRepository = AppDataSource.getRepository(User).extend({
+  findByName(this: Repository<User>, firstName: string, lastName: string) {
+    return this.createQueryBuilder('user')
+      .where('user.firstName = :firstName', { firstName })
+      .andWhere('user.lastName = :lastName', { lastName })
+      .getMany();
+  },
 
-  async findById(id: number): Promise<User | null> {
-    return this.findOne({ where: { id } });
-  }
+  findOneByEmail(this: Repository<User>, email: string) {
+    return this.findOne({
+      where: { email },
+    });
+  },
+});
 
-  async createUser(userData: Partial<User>): Promise<User> {
-    const user = this.create(userData);
-    return this.save(user);
-  }
-
-  async updateUser(id: number, userData: Partial<User>): Promise<User | null> {
-    await this.update(id, userData);
-    return this.findById(id);
-  }
-}
+export default UsersRepository;
+export type UsersRepositoryType = typeof UsersRepository;

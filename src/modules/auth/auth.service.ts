@@ -12,7 +12,7 @@ export class AuthService {
   ) { }
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.usersService.findByEmail(email)
+    const user = await this.usersService.findOneByEmail(email)
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Identifiants invalides')
     }

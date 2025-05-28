@@ -1,14 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Inject, Injectable } from '@nestjs/common';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { UsersRepository } from './users.repository';
+import type { UsersRepositoryType } from './users.repository';
 
 @Injectable()
 export class UsersService {
 
   constructor(
-    @InjectRepository(User)
-    private usersRepository: UsersRepository,
+    @Inject(getRepositoryToken(User))
+    private readonly usersRepository: UsersRepositoryType,
   ) { }
 
   async findAll(): Promise<User[]> {
@@ -33,7 +33,7 @@ export class UsersService {
     await this.usersRepository.delete(id);
   }
 
-  async findByEmail(email: string): Promise<User | null> {
-    return this.usersRepository.findByEmail(email);
+  async findOneByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOneByEmail(email);
   }
 }

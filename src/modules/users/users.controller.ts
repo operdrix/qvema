@@ -18,7 +18,7 @@ export class UsersController {
 
   @Get('email/:email')
   async getUserByEmail(@Param('email') email: string): Promise<User | null> {
-    return await this.usersService.findByEmail(email);
+    return await this.usersService.findOneByEmail(email);
   }
 
   @Post()
