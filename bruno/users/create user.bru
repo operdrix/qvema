@@ -1,0 +1,21 @@
+meta {
+  name: create user
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{host}}/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "admin@qvema.com",
+    "password": "password",
+    "firstname": "user",
+    "lastname": "user",
+    "role": "admin"
+  }
+}
