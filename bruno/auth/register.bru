@@ -12,9 +12,32 @@ post {
 
 body:json {
   {
-    "email": "admin@qvema.com",
+    "email": "entrepreneur@qvema.com",
     "password": "password",
-    "firstName": "admin",
-    "lastName": "admin"
+    "firstName": "entrepreneur",
+    "lastName": "entrepreneur"
   }
+  
+  /*
+  {
+    "email": "entrepreneur@qvema.com",
+    "password": "password",
+    "firstName": "entrepreneur",
+    "lastName": "entrepreneur"
+  }
+  */
+  
+  /*
+  {
+    "email": "entrepreneur@qvema.com",
+    "password": "password",
+    "firstName": "entrepreneur",
+    "lastName": "entrepreneur"
+  }
+  */
+}
+
+script:post-response {
+  const data = res.getBody();
+  bru.setEnvVar("token",data.access_token)
 }

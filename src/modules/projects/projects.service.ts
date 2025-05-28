@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
+import { UserRole } from '../users/enums/role.enum';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { Project } from './entities/project.entity';
 
@@ -43,8 +44,12 @@ export class ProjectsService {
     return await this.projectsRepository.save(project);
   }
 
-  async remove(id: string): Promise<{ message: string }> {
+  async remove(id: string, user: User): Promise<{ message: string }> {
     const project = await this.findOne(id);
+    // Seul le créateur (entrepreneur) ou un admin peut supprimer
+    if (project.owner.id !== user.id && user.role !== UserRole.ADMIN) {
+      throw new ForbiddenException("Vous n'avez pas le droit de supprimer ce projet");
+    }
     await this.projectsRepository.remove(project);
     return { message: 'Projet supprimé avec succès' };
   }

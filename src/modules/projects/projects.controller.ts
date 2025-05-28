@@ -1,7 +1,6 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserRole } from '../users/enums/role.enum';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { Project } from './entities/project.entity';
@@ -9,7 +8,7 @@ import { ProjectsService } from './projects.service';
 
 @Controller('projects')
 @UseInterceptors(ClassSerializerInterceptor)
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard)
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) { }
 
@@ -46,7 +45,7 @@ export class ProjectsController {
 
   @Delete(':id')
   @Roles(UserRole.ADMIN)
-  async remove(@Param('id') id: string): Promise<{ message: string }> {
-    return await this.projectsService.remove(id);
+  async remove(@Param('id') id: string, @Request() req): Promise<{ message: string }> {
+    return await this.projectsService.remove(id, req.user);
   }
 } 
