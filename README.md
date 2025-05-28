@@ -1,98 +1,86 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# QVEMA - API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Autorisations
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Routes d'authentification
 
-## Description
+| Route | Méthode | Accès | Body | Retour |
+|-------|---------|-------|------|---------|
+| `/auth/register` | POST | Public | ```json { "firstName": "string", "lastName": "string", "email": "string", "password": "string", "role": "entrepreneur" \| "investor" } ``` | ```json { "access_token": "string" } ``` |
+| `/auth/login` | POST | Public | ```json { "email": "string", "password": "string" } ``` | ```json { "access_token": "string" } ``` |
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Notes :
+- Le rôle par défaut est `entrepreneur` si non spécifié
+- Seuls les rôles `entrepreneur` et `investor` sont autorisés lors de l'inscription
+- Le token JWT contient l'email, l'id et le rôle de l'utilisateur
 
-## Project setup
+### Routes utilisateurs
 
-```bash
-$ npm install
-```
+| Route | Méthode | Accès | Body | Retour |
+|-------|---------|-------|------|---------|
+| `/users` | GET | Admin | - | Liste des utilisateurs |
+| `/users/profile` | GET | Authentifié | - | Profil de l'utilisateur connecté |
+| `/users/:id` | GET | Admin | - | Détails d'un utilisateur |
+| `/users/email/:email` | GET | Admin | - | Utilisateur par email |
+| `/users` | POST | Admin | ```json { "firstName": "string", "lastName": "string", "email": "string", "password": "string", "role": "entrepreneur" \| "investor" \| "admin" } ``` | Utilisateur créé |
+| `/users/:id` | PATCH | Self ou Admin | ```json { "firstName": "string", "lastName": "string", "email": "string", "password": "string", "role": "entrepreneur" \| "investor" \| "admin" } ``` | Utilisateur mis à jour |
+| `/users/:id` | DELETE | Admin | - | ```json { "message": "Utilisateur supprimé avec succès" } ``` |
+| `/users/interests` | POST | Authentifié | ```json { "interestIds": ["uuid"] } ``` | Utilisateur avec ses intérêts |
+| `/users/interests` | GET | Authentifié | - | Liste des intérêts de l'utilisateur |
 
-## Compile and run the project
+Notes :
+- Toutes les routes sont protégées par JWT
+- Le mot de passe est toujours exclu des réponses
+- Les validations de données sont effectuées sur tous les champs
+- Les rôles possibles sont : `entrepreneur`, `investor`, `admin`
 
-```bash
-# development
-$ npm run start
+### Routes projets
 
-# watch mode
-$ npm run start:dev
+| Route | Méthode | Accès | Body | Retour |
+|-------|---------|-------|------|---------|
+| `/projects` | GET | Authentifié | - | Liste des projets |
+| `/projects/my-projects` | GET | Authentifié | - | Projets de l'utilisateur connecté |
+| `/projects/recommended` | GET | Authentifié | - | Projets recommandés selon les intérêts |
+| `/projects/:id` | GET | Authentifié | - | Détails d'un projet |
+| `/projects` | POST | Entrepreneur | ```json { "title": "string", "description": "string", "budget": "number", "category": "string" } ``` | Projet créé |
+| `/projects/:id` | PATCH | Entrepreneur (créateur) | ```json { "title": "string", "description": "string", "budget": "number", "category": "string" } ``` | Projet mis à jour |
+| `/projects/:id` | DELETE | Admin ou Entrepreneur (créateur) | - | ```json { "message": "Projet supprimé avec succès" } ``` |
 
-# production mode
-$ npm run start:prod
-```
+Notes :
+- Toutes les routes sont protégées par JWT
+- Seuls les entrepreneurs peuvent créer et modifier des projets
+- Un entrepreneur ne peut modifier que ses propres projets
+- La suppression est possible par l'admin ou le créateur du projet
 
-## Run tests
+### Routes centres d'intérêt
 
-```bash
-# unit tests
-$ npm run test
+| Route | Méthode | Accès | Body | Retour |
+|-------|---------|-------|------|---------|
+| `/interests` | GET | Public | - | Liste des centres d'intérêt |
+| `/interests/:id` | GET | Public | - | Détails d'un centre d'intérêt |
+| `/interests` | POST | Admin | ```json { "name": "string" } ``` | Centre d'intérêt créé |
+| `/interests/:id` | PATCH | Admin | ```json { "name": "string" } ``` | Centre d'intérêt mis à jour |
+| `/interests/:id` | DELETE | Admin | - | ```json { "message": "Centre d'intérêt supprimé avec succès" } ``` |
 
-# e2e tests
-$ npm run test:e2e
+Notes :
+- Les routes de consultation sont publiques
+- Seul l'admin peut créer, modifier et supprimer des centres d'intérêt
+- Le nom doit être unique
 
-# test coverage
-$ npm run test:cov
-```
+### Routes investissements
 
-## Deployment
+| Route | Méthode | Accès | Body | Retour |
+|-------|---------|-------|------|---------|
+| `/investments` | GET | Admin | - | Liste des investissements |
+| `/investments/project/:id` | GET | Authentifié | - | Investissements d'un projet |
+| `/investments/:id` | GET | Self ou Admin | - | Détails d'un investissement |
+| `/investments` | POST | Investor | ```json { "projectId": "uuid", "amount": "number" } ``` | Investissement créé |
+| `/investments/:id` | PATCH | Self ou Admin | ```json { "amount": "number" } ``` | Investissement mis à jour |
+| `/investments/:id` | DELETE | Self ou Admin | - | ```json { "message": "Investissement supprimé avec succès" } ``` |
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Notes :
+- Toutes les routes sont protégées par JWT
+- Seuls les investisseurs peuvent créer des investissements
+- Un investisseur ne peut voir/modifier/supprimer que ses propres investissements
+- L'admin peut voir/modifier/supprimer tous les investissements
+- La relation project est exclue des réponses de la route `/investments/project/:id`
