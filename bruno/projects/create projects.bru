@@ -1,0 +1,25 @@
+meta {
+  name: create projects
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{host}}/projects
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "email": "admin3@qvema.com",
+    "password": "password",
+    "firstName": "user",
+    "lastName": "user",
+    "role": "admin"
+  }
+}

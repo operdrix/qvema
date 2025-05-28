@@ -1,0 +1,28 @@
+meta {
+  name: update projects
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{host}}/projects/{{id}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "firstName": "admin",
+    "lastName": "admin",
+    "email": "admin@qvema.com",
+    "role": "admin"
+  }
+}
+
+vars:pre-request {
+  id: 2a9a37bb-4710-416d-883c-740aa1b3d2f8
+}
