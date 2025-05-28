@@ -1,9 +1,12 @@
+import * as dotenv from 'dotenv';
 import { Interest } from 'src/modules/interests/entities/interest.entity';
 import { Investment } from 'src/modules/investments/entities/investment.entity';
 import { Project } from 'src/modules/projects/entities/project.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import { DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
+dotenv.config(); // Charger les variables d'environnement
+
 
 const config: DataSourceOptions & SeederOptions = {
   type: 'mysql',
