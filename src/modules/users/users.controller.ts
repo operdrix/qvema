@@ -4,6 +4,7 @@ import { SelfOrAdmin } from '../auth/decorators/self-or-admin.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { SelfOrAdminGuard } from '../auth/guards/self-or-admin.guard';
+import { InterestsService } from '../interests/interests.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { UserRole } from './enums/role.enum';
@@ -13,7 +14,10 @@ import { UsersService } from './users.service';
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly interestsService: InterestsService,
+  ) { }
 
   @Get()
   @Roles(UserRole.ADMIN)
@@ -57,5 +61,16 @@ export class UsersController {
   async remove(@Param('id') id: string): Promise<{ message: string }> {
     await this.usersService.remove(id);
     return { message: 'Utilisateur supprimé avec succès' };
+  }
+
+  @Post('interests')
+  async setUserInterests(@Request() req, @Body('interestIds') interestIds: string[]): Promise<User> {
+    return this.usersService.setUserInterests(req.user.id, interestIds);
+  }
+
+  @Get('interests')
+  async getUserInterests(@Request() req) {
+    const user = await this.usersService.findOne(req.user.id);
+    return user.interests;
   }
 }

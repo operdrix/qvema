@@ -11,6 +11,8 @@ export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private readonly projectsRepository: Repository<Project>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
   ) { }
 
   async create(createProjectDto: CreateProjectDto, owner: User): Promise<Project> {
@@ -58,5 +60,17 @@ export class ProjectsService {
     return await this.projectsRepository.find({
       where: { owner: { id: ownerId } },
     });
+  }
+
+  async getRecommended(userId: string): Promise<Project[]> {
+    const user = await this.usersRepository.findOne({ where: { id: userId }, relations: ['interests'] });
+    if (!user) throw new NotFoundException('Utilisateur non trouvé');
+    if (!user.interests || user.interests.length === 0) return [];
+    const interestIds = user.interests.map(i => i.id);
+    return this.projectsRepository
+      .createQueryBuilder('project')
+      .leftJoinAndSelect('project.interests', 'interest')
+      .where('interest.id IN (:...interestIds)', { interestIds })
+      .getMany();
   }
 } 

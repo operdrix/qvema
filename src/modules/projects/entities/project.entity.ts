@@ -1,4 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Interest } from '../../interests/entities/interest.entity';
 import { User } from '../../users/entities/user.entity';
 
 @Entity('projects')
@@ -30,4 +31,8 @@ export class Project {
 
   @ManyToOne(() => User, { eager: true })
   owner: User;
+
+  @ManyToMany(() => Interest, { eager: true })
+  @JoinTable({ name: 'project_interests' })
+  interests: Interest[];
 } 

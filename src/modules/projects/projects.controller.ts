@@ -48,4 +48,9 @@ export class ProjectsController {
   async remove(@Param('id') id: string, @Request() req): Promise<{ message: string }> {
     return await this.projectsService.remove(id, req.user);
   }
+
+  @Get('recommended')
+  async getRecommended(@Request() req): Promise<Project[]> {
+    return this.projectsService.getRecommended(req.user.id);
+  }
 } 

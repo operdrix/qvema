@@ -1,6 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
+import { Interest } from '../interests/entities/interest.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import type { UsersRepositoryType } from './users.repository';
@@ -11,6 +13,8 @@ export class UsersService {
   constructor(
     @Inject(getRepositoryToken(User))
     private readonly usersRepository: UsersRepositoryType,
+    @InjectRepository(Interest)
+    private readonly interestsRepository: Repository<Interest>,
   ) { }
 
   async findAll(): Promise<User[]> {
@@ -54,5 +58,13 @@ export class UsersService {
       throw new NotFoundException(`Utilisateur avec l'email ${email} non trouvé`);
     }
     return user;
+  }
+
+  async setUserInterests(userId: string, interestIds: string[]): Promise<User> {
+    const user = await this.findOne(userId);
+    if (!user) throw new NotFoundException('Utilisateur non trouvé');
+    const interests = await this.interestsRepository.findByIds(interestIds);
+    user.interests = interests;
+    return await this.usersRepository.save(user);
   }
 }

@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Interest } from '../../interests/entities/interest.entity';
 import { UserRole } from '../enums/role.enum';
 
 @Entity('users')
@@ -36,4 +37,8 @@ export class User {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @ManyToMany(() => Interest, { eager: true })
+  @JoinTable({ name: 'user_interests' })
+  interests: Interest[];
 }
