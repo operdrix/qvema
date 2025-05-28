@@ -88,6 +88,16 @@ export class FixturesService {
       }),
     );
 
+    // Associer des intérêts aux utilisateurs (hors admin)
+    const nonAdminUsers = createdUsers.filter(u => u.role !== 'admin');
+    for (const user of nonAdminUsers) {
+      // Sélectionner entre 1 et 3 intérêts aléatoires
+      const shuffled = [...createdInterests].sort(() => 0.5 - Math.random());
+      const nb = Math.floor(Math.random() * 3) + 1;
+      user.interests = shuffled.slice(0, nb);
+      await this.usersRepository.save(user);
+    }
+
     return {
       users: createdUsers.length,
       interests: createdInterests.length,
