@@ -1,4 +1,5 @@
 import { Interest } from 'src/modules/interests/entities/interest.entity';
+import { Investment } from 'src/modules/investments/entities/investment.entity';
 import { Project } from 'src/modules/projects/entities/project.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import { DataSourceOptions } from 'typeorm';
@@ -13,7 +14,7 @@ const config: DataSourceOptions & SeederOptions = {
   database: process.env.DB_NAME || 'qvema',
   synchronize: process.env.NODE_ENV !== 'production', // Only synchronize in development
   ssl: false,
-  entities: [User, Project, Interest],
+  entities: [User, Project, Interest, Investment],
 };
 
 // console.log('Database configuration:', {

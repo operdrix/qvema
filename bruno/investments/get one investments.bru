@@ -1,0 +1,19 @@
+meta {
+  name: get one investments
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{host}}/investments/{{id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+vars:pre-request {
+  id: 41821d1f-982d-459c-bfa0-114a0f2b183c
+}

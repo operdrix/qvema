@@ -1,0 +1,25 @@
+meta {
+  name: update investments
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{host}}/investments/{{id}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "Espace"
+  }
+}
+
+vars:pre-request {
+  id: 41821d1f-982d-459c-bfa0-114a0f2b183c
+}

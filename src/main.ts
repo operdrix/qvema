@@ -1,8 +1,8 @@
 import * as dotenv from 'dotenv';
 dotenv.config(); // Charger les variables d'environnement
 
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import { TypeOrmExceptionFilter } from './common/filters/typeorm-exception.filter';
@@ -35,6 +35,8 @@ async function bootstrap() {
 
   // Activation du filtre d'exception global
   app.useGlobalFilters(new TypeOrmExceptionFilter());
+
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   await app.listen(PORT, () =>
     logger.log(`Server is running on http://localhost:${PORT}`),

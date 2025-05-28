@@ -17,8 +17,8 @@ export class User {
   @Column({ unique: true, length: 100 })
   email: string;
 
+  @Column()
   @Exclude()
-  @Column({ length: 255 })
   password: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

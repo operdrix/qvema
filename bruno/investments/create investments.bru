@@ -1,0 +1,22 @@
+meta {
+  name: create investments
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{host}}/investments
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "projectId": "b3c8170b-f485-4739-9f9c-07bdd431a5c8",
+    "amount": 1000
+  }
+}
