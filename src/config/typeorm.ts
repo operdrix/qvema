@@ -1,3 +1,4 @@
+import { Project } from 'src/modules/projects/entities/project.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import { DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
@@ -11,7 +12,7 @@ const config: DataSourceOptions & SeederOptions = {
   database: process.env.DB_NAME || 'qvema',
   synchronize: process.env.NODE_ENV !== 'production', // Only synchronize in development
   ssl: false,
-  entities: [User],
+  entities: [User, Project],
 };
 
 console.log('Database configuration:', {
