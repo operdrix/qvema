@@ -60,6 +60,28 @@ yarn start:prod
 
 L'API sera accessible à l'adresse : `http://localhost:3001`
 
+## Données de test (fixtures)
+
+Pour initialiser la base de données avec des données de test réalistes (utilisateurs, projets, intérêts, investissements), utilisez le système de fixtures fourni.
+
+### Charger les fixtures
+
+Assurez-vous que votre base de données est accessible et que les variables d'environnement (.env) sont correctement configurées.
+
+Lancez simplement :
+
+```bash
+npm run load-fixtures
+```
+
+Ce script va :
+- Créer des utilisateurs (admin, entrepreneurs, investisseurs)
+- Créer des centres d'intérêt
+- Créer des projets associés
+- Créer des investissements variés
+
+Vous pouvez relancer ce script à tout moment pour réinitialiser les données de test.
+
 ## Autorisations
 
 ### Routes d'authentification
