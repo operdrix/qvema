@@ -5,6 +5,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
+import { TypeOrmExceptionFilter } from './common/filters/typeorm-exception.filter';
 import { AppDataSource } from './config/datasource';
 
 const logger = new Logger('QVEMA');
@@ -31,6 +32,9 @@ async function bootstrap() {
     transform: true, // Transforme automatiquement les types
     forbidNonWhitelisted: true, // Rejette les requêtes avec des propriétés non définies
   }));
+
+  // Activation du filtre d'exception global
+  app.useGlobalFilters(new TypeOrmExceptionFilter());
 
   await app.listen(PORT, () =>
     logger.log(`Server is running on http://localhost:${PORT}`),
