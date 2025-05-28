@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config(); // Charger les variables d'environnement
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
@@ -24,6 +24,14 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter()
   );
+
+  // Activation de la validation globale
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true, // Supprime les propriétés non définies dans le DTO
+    transform: true, // Transforme automatiquement les types
+    forbidNonWhitelisted: true, // Rejette les requêtes avec des propriétés non définies
+  }));
+
   await app.listen(PORT, () =>
     logger.log(`Server is running on http://localhost:${PORT}`),
   );
