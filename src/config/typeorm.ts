@@ -16,11 +16,11 @@ const config: DataSourceOptions & SeederOptions = {
   entities: [User, Project, Interest],
 };
 
-console.log('Database configuration:', {
-  host: config.host,
-  port: config.port,
-  username: config.username,
-  database: config.database,
-});
+// console.log('Database configuration:', {
+//   host: config.host,
+//   port: config.port,
+//   username: config.username,
+//   database: config.database,
+// });
 
 export const typeOrmConfig = config;
