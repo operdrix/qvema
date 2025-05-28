@@ -1,5 +1,64 @@
 # QVEMA - API
 
+## Installation
+
+### Prérequis
+- Node.js (v18 ou supérieur)
+- MySQL (v8 ou supérieur)
+- npm ou yarn
+
+### Configuration
+
+1. Cloner le projet
+```bash
+git clone https://github.com/operdrix/qvema.git
+cd qvema
+```
+
+2. Installer les dépendances
+```bash
+npm install
+# ou
+yarn install
+```
+
+3. Configuration de l'environnement
+```bash
+# Copier le fichier .env.example
+cp .env.example .env
+
+# Modifier les variables d'environnement dans .env
+DB_HOST=localhost
+DB_PORT=33061
+DB_USER=myuser
+DB_PASSWORD=mypassword
+DB_NAME=qvema
+
+PORT=3001
+
+JWT_SECRET=votre_secret_jwt
+JWT_EXPIRATION=3600
+```
+
+1. Créer la base de données ou utiliser le docker compose fourni
+
+2. Lancer l'application
+```bash
+# Développement
+npm run start:dev
+# ou
+yarn start:dev
+
+# Production
+npm run build
+npm run start:prod
+# ou
+yarn build
+yarn start:prod
+```
+
+L'API sera accessible à l'adresse : `http://localhost:3001`
+
 ## Autorisations
 
 ### Routes d'authentification
