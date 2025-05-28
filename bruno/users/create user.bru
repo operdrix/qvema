@@ -7,15 +7,19 @@ meta {
 post {
   url: {{host}}/users
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
 }
 
 body:json {
   {
-    "email": "admin@qvema.com",
+    "email": "admin2@qvema.com",
     "password": "password",
-    "firstname": "user",
-    "lastname": "user",
+    "firstName": "user",
+    "lastName": "user",
     "role": "admin"
   }
 }

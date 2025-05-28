@@ -1,11 +1,11 @@
 meta {
-  name: update user
+  name: get by email
   type: http
-  seq: 5
+  seq: 7
 }
 
-patch {
-  url: {{host}}/users/{{id}}
+get {
+  url: {{host}}/users/email/{{email}}
   body: none
   auth: bearer
 }
@@ -15,5 +15,5 @@ auth:bearer {
 }
 
 vars:pre-request {
-  id: 1
+  email: admin@qvema.com
 }
