@@ -23,38 +23,38 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
-    return this.usersService.findOne(req.user.id);
+  async getProfile(@Request() req): Promise<User> {
+    return await this.usersService.findOne(req.user.id);
   }
 
   @Get(':id')
   @Roles(UserRole.ADMIN)
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<User> {
+    return await this.usersService.findOne(id);
   }
 
   @Get('email/:email')
   @Roles(UserRole.ADMIN)
-  async getUserByEmail(@Param('email') email: string): Promise<User | null> {
+  async getUserByEmail(@Param('email') email: string): Promise<User> {
     return await this.usersService.findOneByEmail(email);
   }
 
   @Post()
   @Roles(UserRole.ADMIN)
-  createUser(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return await this.usersService.create(createUserDto);
   }
 
   @Patch(':id')
   @UseGuards(SelfOrAdminGuard)
   @SelfOrAdmin()
-  update(@Param('id') id: string, @Body() userData: Partial<CreateUserDto>) {
-    return this.usersService.update(id, userData);
+  async update(@Param('id') id: string, @Body() userData: Partial<CreateUserDto>): Promise<User> {
+    return await this.usersService.update(id, userData);
   }
 
   @Delete(':id')
   @Roles(UserRole.ADMIN)
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: string): Promise<void> {
+    await this.usersService.remove(id);
   }
 }
