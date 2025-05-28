@@ -30,7 +30,7 @@ export class UsersController {
   @Get(':id')
   @Roles(UserRole.ADMIN)
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    return this.usersService.findOne(id);
   }
 
   @Get('email/:email')
@@ -49,12 +49,12 @@ export class UsersController {
   @UseGuards(SelfOrAdminGuard)
   @SelfOrAdmin()
   update(@Param('id') id: string, @Body() userData: Partial<CreateUserDto>) {
-    return this.usersService.update(+id, userData);
+    return this.usersService.update(id, userData);
   }
 
   @Delete(':id')
   @Roles(UserRole.ADMIN)
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.remove(id);
   }
 }

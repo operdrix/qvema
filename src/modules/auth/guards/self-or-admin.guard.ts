@@ -25,7 +25,7 @@ export class SelfOrAdminGuard implements CanActivate {
     }
 
     // Sinon, vérifier si l'utilisateur modifie son propre profil
-    if (user.id !== +params.id) {
+    if (user.id !== params.id) {
       throw new ForbiddenException('Vous ne pouvez modifier que votre propre profil');
     }
 

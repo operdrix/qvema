@@ -17,7 +17,7 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
-  async findOne(id: number): Promise<User | null> {
+  async findOne(id: string): Promise<User | null> {
     return await this.usersRepository.findOne({ where: { id } });
   }
 
@@ -30,7 +30,7 @@ export class UsersService {
     return await this.usersRepository.save(newUser);
   }
 
-  async update(id: number, userData: Partial<User>): Promise<User | null> {
+  async update(id: string, userData: Partial<User>): Promise<User | null> {
     if (userData.password) {
       userData.password = await bcrypt.hash(userData.password, 10);
     }
@@ -38,7 +38,7 @@ export class UsersService {
     return await this.usersRepository.findOne({ where: { id } });
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
 
