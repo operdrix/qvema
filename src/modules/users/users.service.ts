@@ -1,7 +1,7 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Interest } from '../interests/entities/interest.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
@@ -61,9 +61,11 @@ export class UsersService {
   }
 
   async setUserInterests(userId: string, interestIds: string[]): Promise<User> {
+    if (!Array.isArray(interestIds) || interestIds.length === 0) {
+      throw new BadRequestException('interestIds doit être un tableau non vide');
+    }
     const user = await this.findOne(userId);
-    if (!user) throw new NotFoundException('Utilisateur non trouvé');
-    const interests = await this.interestsRepository.findByIds(interestIds);
+    const interests = await this.interestsRepository.find({ where: { id: In(interestIds) } });
     user.interests = interests;
     return await this.usersRepository.save(user);
   }

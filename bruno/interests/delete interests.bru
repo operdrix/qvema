@@ -1,0 +1,19 @@
+meta {
+  name: delete interests
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{host}}/interests/{{id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+vars:pre-request {
+  id: 41821d1f-982d-459c-bfa0-114a0f2b183c
+}

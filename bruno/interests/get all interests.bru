@@ -1,0 +1,15 @@
+meta {
+  name: get all interests
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}/interests
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

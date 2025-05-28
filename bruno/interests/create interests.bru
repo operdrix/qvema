@@ -1,0 +1,21 @@
+meta {
+  name: create interests
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{host}}/interests
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "Bijouterie"
+  }
+}

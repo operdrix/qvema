@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { SelfOrAdmin } from '../auth/decorators/self-or-admin.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -65,6 +65,9 @@ export class UsersController {
 
   @Post('interests')
   async setUserInterests(@Request() req, @Body('interestIds') interestIds: string[]): Promise<User> {
+    if (!Array.isArray(interestIds) || interestIds.length === 0) {
+      throw new BadRequestException('interestIds doit être un tableau non vide');
+    }
     return this.usersService.setUserInterests(req.user.id, interestIds);
   }
 
