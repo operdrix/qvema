@@ -1,0 +1,24 @@
+meta {
+  name: project Investments
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{host}}/investments/project/{{project_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+vars:pre-request {
+  project_id: b3c8170b-f485-4739-9f9c-07bdd431a5c8
+}
+
+docs {
+  Cette route permet de récupérer tous les investissements d'un projet spécifique.
+  Elle nécessite d'être authentifié.
+}

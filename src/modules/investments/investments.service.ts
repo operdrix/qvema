@@ -22,6 +22,12 @@ export class InvestmentsService {
     return this.investmentsRepository.find();
   }
 
+  async findByProject(projectId: string): Promise<Investment[]> {
+    const project = await this.projectsRepository.findOne({ where: { id: projectId } });
+    if (!project) throw new NotFoundException('Projet non trouvé');
+    return this.investmentsRepository.find({ where: { project: { id: projectId } } });
+  }
+
   async findOne(id: string, user: User): Promise<Investment> {
     const investment = await this.investmentsRepository.findOne({ where: { id } });
     if (!investment) throw new NotFoundException('Investissement non trouvé');
