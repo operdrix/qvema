@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { UserRole } from '../enums/role.enum';
 
 @Entity('users')
 export class User {
@@ -22,8 +23,12 @@ export class User {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ length: 30 })
-  role: string;
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.ENTREPRENEUR
+  })
+  role: UserRole;
 
   @Column({
     type: 'timestamp',
