@@ -12,12 +12,12 @@ post {
 
 body:json {
   {
-    "email": "admin@example.com",
-    "password": "adminpassword"
+    "email": "admin@qvema.com",
+    "password": "password"
   }
 }
 
 script:post-response {
   const data = res.getBody();
-  bru.setEnvVar("token",data.token)
+  bru.setEnvVar("token",data.access_token)
 }
