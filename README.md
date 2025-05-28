@@ -41,9 +41,9 @@ JWT_SECRET=votre_secret_jwt
 JWT_EXPIRATION=3600
 ```
 
-1. Créer la base de données ou utiliser le docker compose fourni
+4. Créer la base de données ou utiliser le docker compose fourni
 
-2. Lancer l'application
+5. Lancer l'application
 ```bash
 # Développement
 npm run start:dev
