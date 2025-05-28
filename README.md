@@ -1,4 +1,5 @@
 # QVEMA - API
+Par Olivier PERDRIX M2 IW
 
 ## Installation
 
